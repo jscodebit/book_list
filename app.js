@@ -21,15 +21,15 @@ UI.prototype.addBookToList = function(book){
     <td>${book.title}</td>
     <td>${book.author}</td>
     <td>${book.isbn}</td>
-    <td><a id="delete_record" class="btn text-danger btn-transparent" href="#">X</a></td>`;
+    <td><a id="delete_record" class="btn text-danger btn-transparent pt-0" href="#">X</a></td>`;
     list.appendChild(row);
 }
 
 //Delete Book from Table
-UI.prototype.deleteRecord = function(e){
-    if(e.target.id === 'delete_record'){
+UI.prototype.deleteBookRecord = function(event){
+    if(event.target.id === 'delete_record'){
         //console.log("Yes");
-        e.target.parentNode.parentNode.remove();
+        event.target.parentNode.parentNode.remove();
     }
 };
 
@@ -61,8 +61,9 @@ UI.prototype.showAlert = function(message, alertClass){
 }
 
 //Event Listeners
+
 //Event listener for add book
-document.getElementById('book-form').addEventListener('submit', function(e){
+document.getElementById('book-form').addEventListener('submit', function(event){
     //console.log("test");
     //Get form values
     const title = document.getElementById('title').value,
@@ -85,16 +86,16 @@ document.getElementById('book-form').addEventListener('submit', function(e){
         //UI show alert box
         ui.showAlert('Successfully Added!', 'alert-success'); 
     }
-    e.preventDefault();
+    event.preventDefault();
 });
 
 //Event listener for delete book from the list
-document.querySelector('#book-list').addEventListener('click',function(e){
+document.querySelector('#book-list').addEventListener('click',function(event){
     //console.log(e.target);
     
     //Instantiate a UI
     const ui = new UI();
-    ui.deleteRecord(e);
+    ui.deleteBookRecord(event);
     ui.showAlert('Book removed!', 'alert-info');
-    e.preventDefault();
+    event.preventDefault();
 });
