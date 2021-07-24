@@ -49,7 +49,6 @@ class UI {
         if(e.target.id === 'delete_record'){
             //console.log("Yes");
             e.target.parentNode.parentNode.remove();
-            console.log(e.target.parentElement.previousElementSibling.textContent);
             Storage.removeBook(e.target.parentElement.previousElementSibling.textContent);
         }
     }
@@ -91,11 +90,9 @@ class Storage {
     }
     static removeBook(isbn){
         const books = Storage.getBooks();
-        console.log(Object.values(books));
         const newBooks = Object.values(books).filter(book => {
             return book.isbn != isbn;
         });
-        console.log(newBooks);
         localStorage.setItem('books', JSON.stringify(newBooks));
     }
 }
