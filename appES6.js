@@ -69,11 +69,9 @@ class Storage {
         if(localStorage.getItem('books') === null){
             books = []; 
         } else {
-            //console.log(JSON.parse(localStorage.getItem('books')));
-            books = localStorage.getItem('books');
-            //console.log(books);
+            books = JSON.parse(localStorage.getItem('books'));
         }
-        return JSON.parse(books);
+        return books;
     }
     static displayBooks(){
         const books = Storage.getBooks();
