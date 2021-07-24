@@ -6,14 +6,14 @@ function Book(title, author, isbn){
 }
 
 //UI Constructor
-function UI(){
+function UI(){}
 
-}
-
+//All the add, delete operations happen on the prototype
 //Add book to List
 UI.prototype.addBookToList = function(book){
     //console.log(book);
-    const list = document.getElementById('book-list');
+    //Get the form element
+    const list = document.getElementById('book-list');    
     const row = document.createElement('tr');
     //console.log(row);
 
@@ -32,6 +32,7 @@ UI.prototype.deleteRecord = function(e){
         e.target.parentNode.parentNode.remove();
     }
 };
+
 //Clear Fields
 UI.prototype.clearFields = function(){
     document.getElementById('title').value = '';
@@ -40,24 +41,26 @@ UI.prototype.clearFields = function(){
 }
 
 //UI show Alert Box
-
-UI.prototype.showAlertBox = function(message, alertClass){
-    const parentEle = document.querySelector('.container');
+UI.prototype.showAlert = function(message, alertClass){
+    //Get the book form dom element
     const formEle = document.getElementById('book-form');
+    //Create the iv element for alert box
     const createDiv = document.createElement('div');
+    //add class list
     createDiv.className = `alert ${alertClass}`;
+    //set the text message
     createDiv.innerHTML = message;
+    //Get the container dom element
+    const parentEle = document.querySelector('.container');
+    //Insert alert box right before form element
     parentEle.insertBefore(createDiv, formEle);
     //Set time out after 3 seconds
     setTimeout(function(){
         document.querySelector('.alert').remove();
     }, 5000)
-
 }
-//All the add, delete operations happen on the prototype
 
 //Event Listeners
-
 //Event listener for add book
 document.getElementById('book-form').addEventListener('submit', function(e){
     //console.log("test");
@@ -73,24 +76,25 @@ document.getElementById('book-form').addEventListener('submit', function(e){
 
     //Validate
     if(title === '' || author === '' || isbn === ''){
-        ui.showAlertBox('Please fill in all fields', 'alert-danger')
+        ui.showAlert('Please fill in all fields', 'alert-danger')
     } else {
         //UI Add book to List
         ui.addBookToList(book);
         //UI Clear fields
         ui.clearFields();
         //UI show alert box
-        ui.showAlertBox('Successfully Added!', 'alert-success'); 
+        ui.showAlert('Successfully Added!', 'alert-success'); 
     }
-    //console.log(book);
     e.preventDefault();
 });
 
 //Event listener for delete book from the list
 document.querySelector('#book-list').addEventListener('click',function(e){
-    console.log(e.target);
+    //console.log(e.target);
+    
     //Instantiate a UI
     const ui = new UI();
     ui.deleteRecord(e);
+    ui.showAlert('Book removed!', 'alert-info');
     e.preventDefault();
 });
