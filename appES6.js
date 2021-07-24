@@ -49,6 +49,8 @@ class UI {
         if(e.target.id === 'delete_record'){
             //console.log("Yes");
             e.target.parentNode.parentNode.remove();
+            console.log(e.target.parentElement.previousElementSibling.textContent);
+            Storage.removeBook(e.target.parentElement.previousElementSibling.textContent);
         }
     }
 
@@ -57,6 +59,46 @@ class UI {
         document.getElementById('title').value = '';
         document.getElementById('author').value = '';
         document.getElementById('isbn').value = '';
+    }
+}
+
+//Local Storage Class
+class Storage {
+    static getBooks(){
+        let books; 
+        if(localStorage.getItem('books') === null){
+            books = []; 
+        } else {
+            //console.log(JSON.parse(localStorage.getItem('books')));
+            books = localStorage.getItem('books');
+            //console.log(books);
+        }
+        return JSON.parse(books);
+    }
+    static displayBooks(){
+        const books = Storage.getBooks();
+
+        books.forEach(book => {
+            //console.log(book);
+            const ui = new UI();
+            ui.addBookToList(book);
+        });
+    }
+    static addBook(book){
+        const books = Storage.getBooks();
+        //console.log(books);
+        books.push(book);
+        //console.log(JSON.stringify(books));
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+    static removeBook(isbn){
+        const books = Storage.getBooks();
+        console.log(Object.values(books));
+        const newBooks = Object.values(books).filter(book => {
+            return book.isbn != isbn;
+        });
+        console.log(newBooks);
+        localStorage.setItem('books', JSON.stringify(newBooks));
     }
 }
 
@@ -71,6 +113,7 @@ document.getElementById('book-form').addEventListener('submit', function(evente)
             isbn = document.getElementById('isbn').value;
 
     const book = new Book(title, author, isbn);
+    Storage.addBook(book);
 
     //Instantiate a UI
     const ui = new UI();
@@ -100,3 +143,6 @@ document.querySelector('#book-list').addEventListener('click',function(event){
     ui.showAlert('Book removed!', 'alert-info');
     event.preventDefault();
 });
+
+//DOM Load event
+document.addEventListener('DOMContentLoaded', Storage.displayBooks());
